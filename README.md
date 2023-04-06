@@ -11,3 +11,45 @@ When using [Direct Uploads for Cloudflare Pages](https://developers.cloudflare.c
 > Branch name aliases are lowercased and non-alphanumeric characters are replaced with a hyphen — for example, the `fix/api` branch creates the `fix-api.<project>.pages.dev` alias.
 
 Full credit goes to [Daniel Walsh](https://github.com/WalshyDev) who shared a [JavaScript algorithm to calculate the `<git-branch>` prefix on the Cloudflare Community forums](https://community.cloudflare.com/t/algorithm-to-generate-a-preview-dns-subdomain-from-a-branch-name/477633/2). This Action is merely a wrapper around that script.
+
+## Usage
+
+The following shows how the action can be used to pass the calculated branch alias to Hugo via `--baseURL` flag.
+
+```yml
+name: Build Hugo Site
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: "0.111.3"
+
+      - uses: schnerring/cloudflare-pages-branch-alias-action@v1
+        id: pages-branch-alias
+        with:
+          # git-branch input
+          git-branch: ${{ github.ref_name }}
+
+      - name: Build Hugo
+        # branch-alias output
+        run: |
+          hugo \
+            --minify \
+            --baseURL "${{ steps.pages-branch-alias.outputs.branch-alias }}.my-project.pages.dev"
+```
