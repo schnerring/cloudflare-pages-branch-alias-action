@@ -1,6 +1,58 @@
 require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 271:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+// Author: Daniel Walsh (https://github.com/WalshyDev)
+// Source: https://community.cloudflare.com/t/algorithm-to-generate-a-preview-dns-subdomain-from-a-branch-name/477633/2
+// License: ?
+//
+// Modified by: Michael Schnerring
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.generateBranchAlias = void 0;
+const invalidCharsRegex = /[^a-z0-9-]/g;
+const maxAliasLength = 28;
+const alphanum = 'abcdefghijklmnopqrstuvwxyz0123456789';
+function generateBranchAlias(branch) {
+    const normalised = trim(branch.toLowerCase().replace(invalidCharsRegex, '-'), '-');
+    if (normalised === '') {
+        return `branch-${randAlphaNum(10)}`;
+    }
+    if (normalised.length > maxAliasLength) {
+        return normalised.substring(0, maxAliasLength);
+    }
+    return normalised;
+}
+exports.generateBranchAlias = generateBranchAlias;
+function trim(str, char) {
+    while (str.startsWith(char)) {
+        if (str.length === 1) {
+            return '';
+        }
+        str = str.substring(1);
+    }
+    while (str.endsWith(char)) {
+        if (str.length === 1) {
+            return '';
+        }
+        str = str.substring(0, str.length - 1);
+    }
+    return str;
+}
+function randAlphaNum(length) {
+    let result = '';
+    for (let i = 0; i < length; i++) {
+        result += alphanum[Math.floor(Math.random() * alphanum.length)];
+    }
+    return result;
+}
+
+
+/***/ }),
+
 /***/ 109:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -29,66 +81,25 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(186));
-const wait_1 = __nccwpck_require__(817);
+const generate_branch_alias_1 = __nccwpck_require__(271);
 function run() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const ms = core.getInput('milliseconds');
-            core.debug(`Waiting ${ms} milliseconds ...`); // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
-            core.debug(new Date().toTimeString());
-            yield (0, wait_1.wait)(parseInt(ms, 10));
-            core.debug(new Date().toTimeString());
-            core.setOutput('time', new Date().toTimeString());
-        }
-        catch (error) {
-            if (error instanceof Error)
-                core.setFailed(error.message);
-        }
-    });
+    try {
+        const gitBranch = core.getInput('git-branch');
+        core.debug(`git-branch: ${gitBranch}`);
+        core.debug(new Date().toTimeString());
+        const branchAlias = (0, generate_branch_alias_1.generateBranchAlias)(gitBranch);
+        core.debug(new Date().toTimeString());
+        core.setOutput('branch-alias', branchAlias);
+        core.debug(`branch-alias: ${branchAlias}`);
+    }
+    catch (error) {
+        if (error instanceof Error)
+            core.setFailed(error.message);
+    }
 }
 run();
-
-
-/***/ }),
-
-/***/ 817:
-/***/ (function(__unused_webpack_module, exports) {
-
-"use strict";
-
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.wait = void 0;
-function wait(milliseconds) {
-    return __awaiter(this, void 0, void 0, function* () {
-        return new Promise(resolve => {
-            if (isNaN(milliseconds)) {
-                throw new Error('milliseconds not a number');
-            }
-            setTimeout(() => resolve('done!'), milliseconds);
-        });
-    });
-}
-exports.wait = wait;
 
 
 /***/ }),
