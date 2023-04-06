@@ -1,11 +1,13 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: Cloudflare Pages Branch Alias
+description: A GitHub Action that generates a valid branch alias for Cloudflare Pages deployments from a Git branch name.
+author: Michael Schnerring <3743342+schnerring@users.noreply.github.com>
 inputs:
-  milliseconds: # change this
+  git_branch:
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: Git branch name
+outputs:
+  branch_alias:
+    description: Branch alias suitable for Cloudflare Pages deployment
 runs:
-  using: 'node16'
-  main: 'dist/index.js'
+  using: node16
+  main: dist/index.js

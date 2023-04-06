@@ -1,4 +1,4 @@
-# cloudflare-generate-branch-alias-action
+# Cloudflare Pages Branch Alias
 
 A GitHub Action that generates a valid branch alias for Cloudflare Pages deployments from a Git branch name.
 
