@@ -51,5 +51,5 @@ jobs:
         run: |
           hugo \
             --minify \
-            --baseURL "${{ steps.pages-branch-alias.outputs.branch-alias }}.my-project.pages.dev"
+            --baseURL "https://${{ steps.pages-branch-alias.outputs.branch-alias }}.my-project.pages.dev"
 ```
