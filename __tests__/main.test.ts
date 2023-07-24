@@ -5,19 +5,18 @@ import * as path from 'path'
 import {expect, test} from '@jest/globals'
 
 test.each([
-  ["test-abc", "test-abc"],
-  ["Test-ABC", "test-abc"],
-  ["Test:abc", "test-abc"],
-  ["-test-abc-", "test-abc"],
-  ["abcdef123456abcdef123456abcdef123456", "abcdef123456abcdef123456abcd"]])(
-    '.generateBranchAlias(%s)',
-    (gitBranch, expected) => {
+  ['test-abc', 'test-abc'],
+  ['Test-ABC', 'test-abc'],
+  ['Test:abc', 'test-abc'],
+  ['-test-abc-', 'test-abc'],
+  ['abcdef123456abcdef123456abcdef123456', 'abcdef123456abcdef123456abcd']
+])('.generateBranchAlias(%s)', (gitBranch, expected) => {
   const branchAlias = generateBranchAlias(gitBranch)
   expect(branchAlias).toBe(expected)
 })
 
-test("Generate random branch name if input unusable", () => {
-  const input = "-::::-"
+test('Generate random branch name if input unusable', () => {
+  const input = '-::::-'
   const branchAlias = generateBranchAlias(input)
   expect(branchAlias).toMatch(/^branch-[a-z0-9]{10}$/)
 })
