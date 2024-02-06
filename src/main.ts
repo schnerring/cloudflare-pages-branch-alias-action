@@ -1,15 +1,14 @@
 import * as core from '@actions/core'
-import {generateBranchAlias} from './generate-branch-alias'
+import { generateBranchAlias } from './generate-branch-alias'
 
-function run(): void {
+export function run(): void {
   try {
     const gitBranch: string = core.getInput('git-branch')
+
     core.debug(`git-branch: ${gitBranch}`)
 
     core.debug(new Date().toTimeString())
-
     const branchAlias = generateBranchAlias(gitBranch)
-
     core.debug(new Date().toTimeString())
 
     core.setOutput('branch-alias', branchAlias)
@@ -18,5 +17,3 @@ function run(): void {
     if (error instanceof Error) core.setFailed(error.message)
   }
 }
-
-run()

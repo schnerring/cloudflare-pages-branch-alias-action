@@ -1,33 +1,65 @@
-import {generateBranchAlias} from '../src/generate-branch-alias'
-import * as process from 'process'
-import * as cp from 'child_process'
-import * as path from 'path'
-import {expect, test} from '@jest/globals'
+/**
+ * Unit tests for the action's main functionality, src/main.ts
+ *
+ * These should be run as if the action was called from a workflow.
+ * Specifically, the inputs listed in `action.yml` should be set as environment
+ * variables following the pattern `INPUT_<INPUT_NAME>`.
+ */
 
-test.each([
-  ['test-abc', 'test-abc'],
-  ['Test-ABC', 'test-abc'],
-  ['Test:abc', 'test-abc'],
-  ['-test-abc-', 'test-abc'],
-  ['abcdef123456abcdef123456abcdef123456', 'abcdef123456abcdef123456abcd']
-])('.generateBranchAlias(%s)', (gitBranch, expected) => {
-  const branchAlias = generateBranchAlias(gitBranch)
-  expect(branchAlias).toBe(expected)
-})
+import * as core from '@actions/core'
+import * as main from '../src/main'
 
-test('Generate random branch name if input unusable', () => {
-  const input = '-::::-'
-  const branchAlias = generateBranchAlias(input)
-  expect(branchAlias).toMatch(/^branch-[a-z0-9]{10}$/)
-})
+// Mock the action's main function
+const runMock = jest.spyOn(main, 'run')
 
-// shows how the runner will run a javascript action with env / stdout protocol
-test('test runs', () => {
-  process.env['INPUT_GIT-BRANCH'] = 'test-abc'
-  const np = process.execPath
-  const ip = path.join(__dirname, '..', 'lib', 'main.js')
-  const options: cp.ExecFileSyncOptions = {
-    env: process.env
-  }
-  console.log(cp.execFileSync(np, [ip], options).toString())
+// Other utilities
+const timeRegex = /^\d{2}:\d{2}:\d{2}/
+
+// Mock the GitHub Actions core library
+let debugMock: jest.SpyInstance
+let errorMock: jest.SpyInstance
+let getInputMock: jest.SpyInstance
+let setOutputMock: jest.SpyInstance
+
+describe('action', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+
+    debugMock = jest.spyOn(core, 'debug').mockImplementation()
+    errorMock = jest.spyOn(core, 'error').mockImplementation()
+    getInputMock = jest.spyOn(core, 'getInput').mockImplementation()
+    setOutputMock = jest.spyOn(core, 'setOutput').mockImplementation()
+  })
+
+  it('sets the branch-alias output', () => {
+    // Set the action's inputs as return values from core.getInput()
+    getInputMock.mockImplementation((name: string): string => {
+      switch (name) {
+        case 'git-branch':
+          return 'test-abc'
+        default:
+          return ''
+      }
+    })
+
+    main.run()
+    expect(runMock).toHaveReturned()
+
+    // Verify that all of the core library functions were called correctly
+    expect(debugMock).toHaveBeenNthCalledWith(1, 'git-branch: test-abc')
+    expect(debugMock).toHaveBeenNthCalledWith(
+      2,
+      expect.stringMatching(timeRegex)
+    )
+    expect(debugMock).toHaveBeenNthCalledWith(
+      3,
+      expect.stringMatching(timeRegex)
+    )
+    expect(setOutputMock).toHaveBeenNthCalledWith(
+      1,
+      'branch-alias',
+      expect.stringMatching('test-abc')
+    )
+    expect(errorMock).not.toHaveBeenCalled()
+  })
 })

@@ -1,108 +1,5 @@
-require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
+/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
-
-/***/ 271:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-// Author: Daniel Walsh (https://github.com/WalshyDev)
-// Source: https://community.cloudflare.com/t/algorithm-to-generate-a-preview-dns-subdomain-from-a-branch-name/477633/2
-// License: ?
-//
-// Modified by: Michael Schnerring
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.generateBranchAlias = void 0;
-const invalidCharsRegex = /[^a-z0-9-]/g;
-const maxAliasLength = 28;
-const alphanum = 'abcdefghijklmnopqrstuvwxyz0123456789';
-function generateBranchAlias(branch) {
-    const normalised = trim(branch.toLowerCase().replace(invalidCharsRegex, '-'), '-');
-    if (normalised === '') {
-        return `branch-${randAlphaNum(10)}`;
-    }
-    if (normalised.length > maxAliasLength) {
-        return normalised.substring(0, maxAliasLength);
-    }
-    return normalised;
-}
-exports.generateBranchAlias = generateBranchAlias;
-function trim(str, char) {
-    while (str.startsWith(char)) {
-        if (str.length === 1) {
-            return '';
-        }
-        str = str.substring(1);
-    }
-    while (str.endsWith(char)) {
-        if (str.length === 1) {
-            return '';
-        }
-        str = str.substring(0, str.length - 1);
-    }
-    return str;
-}
-function randAlphaNum(length) {
-    let result = '';
-    for (let i = 0; i < length; i++) {
-        result += alphanum[Math.floor(Math.random() * alphanum.length)];
-    }
-    return result;
-}
-
-
-/***/ }),
-
-/***/ 109:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core = __importStar(__nccwpck_require__(186));
-const generate_branch_alias_1 = __nccwpck_require__(271);
-function run() {
-    try {
-        const gitBranch = core.getInput('git-branch');
-        core.debug(`git-branch: ${gitBranch}`);
-        core.debug(new Date().toTimeString());
-        const branchAlias = (0, generate_branch_alias_1.generateBranchAlias)(gitBranch);
-        core.debug(new Date().toTimeString());
-        core.setOutput('branch-alias', branchAlias);
-        core.debug(`branch-alias: ${branchAlias}`);
-    }
-    catch (error) {
-        if (error instanceof Error)
-            core.setFailed(error.message);
-    }
-}
-run();
-
-
-/***/ }),
 
 /***/ 351:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
@@ -2791,6 +2688,110 @@ exports["default"] = _default;
 
 /***/ }),
 
+/***/ 374:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+// Author: Daniel Walsh (https://github.com/WalshyDev)
+// Source: https://community.cloudflare.com/t/algorithm-to-generate-a-preview-dns-subdomain-from-a-branch-name/477633/2
+// License: ?
+//
+// Modified by: Michael Schnerring
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.generateBranchAlias = void 0;
+const invalidCharsRegex = /[^a-z0-9-]/g;
+const maxAliasLength = 28;
+const alphanum = 'abcdefghijklmnopqrstuvwxyz0123456789';
+function generateBranchAlias(branch) {
+    const normalised = trim(branch.toLowerCase().replace(invalidCharsRegex, '-'), '-');
+    if (normalised === '') {
+        return `branch-${randAlphaNum(10)}`;
+    }
+    if (normalised.length > maxAliasLength) {
+        return normalised.substring(0, maxAliasLength);
+    }
+    return normalised;
+}
+exports.generateBranchAlias = generateBranchAlias;
+function trim(str, char) {
+    while (str.startsWith(char)) {
+        if (str.length === 1) {
+            return '';
+        }
+        str = str.substring(1);
+    }
+    while (str.endsWith(char)) {
+        if (str.length === 1) {
+            return '';
+        }
+        str = str.substring(0, str.length - 1);
+    }
+    return str;
+}
+function randAlphaNum(length) {
+    let result = '';
+    for (let i = 0; i < length; i++) {
+        result += alphanum[Math.floor(Math.random() * alphanum.length)];
+    }
+    return result;
+}
+
+
+/***/ }),
+
+/***/ 399:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.run = void 0;
+const core = __importStar(__nccwpck_require__(186));
+const generate_branch_alias_1 = __nccwpck_require__(374);
+function run() {
+    try {
+        const gitBranch = core.getInput('git-branch');
+        core.debug(`git-branch: ${gitBranch}`);
+        core.debug(new Date().toTimeString());
+        const branchAlias = (0, generate_branch_alias_1.generateBranchAlias)(gitBranch);
+        core.debug(new Date().toTimeString());
+        core.setOutput('branch-alias', branchAlias);
+        core.debug(`branch-alias: ${branchAlias}`);
+    }
+    catch (error) {
+        if (error instanceof Error)
+            core.setFailed(error.message);
+    }
+}
+exports.run = run;
+
+
+/***/ }),
+
 /***/ 491:
 /***/ ((module) => {
 
@@ -2917,13 +2918,22 @@ module.exports = require("util");
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
 /******/ 	
 /************************************************************************/
-/******/ 	
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __nccwpck_require__(109);
-/******/ 	module.exports = __webpack_exports__;
-/******/ 	
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+(() => {
+"use strict";
+var exports = __webpack_exports__;
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+/**
+ * The entrypoint for the action.
+ */
+const main_1 = __nccwpck_require__(399);
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+(0, main_1.run)();
+
+})();
+
+module.exports = __webpack_exports__;
 /******/ })()
 ;
-//# sourceMappingURL=index.js.map
