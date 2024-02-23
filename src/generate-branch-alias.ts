@@ -9,9 +9,7 @@ const maxAliasLength = 28
 const alphanum = 'abcdefghijklmnopqrstuvwxyz0123456789'
 
 export function generateBranchAlias(branch: string): string {
-  let normalised = branch.toLowerCase().replace(invalidCharsRegex, '-'),
-    '-'
-  )
+  let normalised = branch.toLowerCase().replace(invalidCharsRegex, '-')
 
   if (normalised.length > maxAliasLength) {
     normalised = normalised.substring(0, maxAliasLength)
