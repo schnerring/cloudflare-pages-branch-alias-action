@@ -2704,12 +2704,13 @@ const invalidCharsRegex = /[^a-z0-9-]/g;
 const maxAliasLength = 28;
 const alphanum = 'abcdefghijklmnopqrstuvwxyz0123456789';
 function generateBranchAlias(branch) {
-    const normalised = trim(branch.toLowerCase().replace(invalidCharsRegex, '-'), '-');
+    let normalised = branch.toLowerCase().replace(invalidCharsRegex, '-');
+    if (normalised.length > maxAliasLength) {
+        normalised = normalised.substring(0, maxAliasLength);
+    }
+    normalised = trim(normalised, '-');
     if (normalised === '') {
         return `branch-${randAlphaNum(10)}`;
-    }
-    if (normalised.length > maxAliasLength) {
-        return normalised.substring(0, maxAliasLength);
     }
     return normalised;
 }

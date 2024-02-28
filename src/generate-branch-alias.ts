@@ -20,7 +20,7 @@ export function generateBranchAlias(branch: string): string {
   if (normalised === '') {
     return `branch-${randAlphaNum(10)}`
   }
-  
+
   return normalised
 }
 
