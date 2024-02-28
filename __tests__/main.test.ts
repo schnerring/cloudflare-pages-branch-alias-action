@@ -16,10 +16,10 @@ const runMock = jest.spyOn(main, 'run')
 const timeRegex = /^\d{2}:\d{2}:\d{2}/
 
 // Mock the GitHub Actions core library
-let debugMock: jest.SpyInstance
-let errorMock: jest.SpyInstance
-let getInputMock: jest.SpyInstance
-let setOutputMock: jest.SpyInstance
+let debugMock: jest.SpiedFunction<typeof core.debug>
+let errorMock: jest.SpiedFunction<typeof core.error>
+let getInputMock: jest.SpiedFunction<typeof core.getInput>
+let setOutputMock: jest.SpiedFunction<typeof core.setOutput>
 
 describe('action', () => {
   beforeEach(() => {
@@ -33,7 +33,7 @@ describe('action', () => {
 
   it('sets the branch-alias output', () => {
     // Set the action's inputs as return values from core.getInput()
-    getInputMock.mockImplementation((name: string): string => {
+    getInputMock.mockImplementation(name => {
       switch (name) {
         case 'git-branch':
           return 'test-abc'
