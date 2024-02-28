@@ -24,9 +24,11 @@ supported by the
 > replaced with a hyphen — for example, the `fix/api` branch creates the
 > `fix-api.<project>.pages.dev` alias.
 
+<!-- markdownlint-disable MD013 -->
 Full credit goes to [Daniel Walsh](https://github.com/WalshyDev) who shared a
 [JavaScript algorithm to calculate the `<git-branch>` prefix on the Cloudflare Community forums](https://community.cloudflare.com/t/algorithm-to-generate-a-preview-dns-subdomain-from-a-branch-name/477633/2).
 This Action is merely a wrapper around that script.
+<!-- markdownlint-enable MD013 -->
 
 ## Usage
 
