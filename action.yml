@@ -1,5 +1,7 @@
 name: Cloudflare Pages Branch Alias
-description: A GitHub Action that generates a valid branch alias for Cloudflare Pages deployments from a Git branch name.
+description:
+  A GitHub Action that generates a valid branch alias for Cloudflare Pages
+  deployments from a Git branch name.
 author: Michael Schnerring <3743342+schnerring@users.noreply.github.com>
 
 branding:
