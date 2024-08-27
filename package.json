@@ -1,7 +1,7 @@
 {
   "name": "cloudflare-pages-branch-alias-action",
   "description": "A GitHub Action that generates a valid branch alias for Cloudflare Pages deployments from a Git branch name",
-  "version": "0.0.0",
+  "version": "v1.1.0",
   "author": "Michael Schnerring",
   "private": true,
   "homepage": "https://github.com/schnerring/cloudflare-pages-branch-alias-action",
