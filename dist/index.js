@@ -2699,7 +2699,7 @@ exports["default"] = _default;
 //
 // Modified by: Michael Schnerring
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.generateBranchAlias = void 0;
+exports.generateBranchAlias = generateBranchAlias;
 const invalidCharsRegex = /[^a-z0-9-]/g;
 const maxAliasLength = 28;
 const alphanum = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -2714,7 +2714,6 @@ function generateBranchAlias(branch) {
     }
     return normalised;
 }
-exports.generateBranchAlias = generateBranchAlias;
 function trim(str, char) {
     while (str.startsWith(char)) {
         if (str.length === 1) {
@@ -2770,7 +2769,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.run = void 0;
+exports.run = run;
 const core = __importStar(__nccwpck_require__(186));
 const generate_branch_alias_1 = __nccwpck_require__(374);
 function run() {
@@ -2788,7 +2787,6 @@ function run() {
             core.setFailed(error.message);
     }
 }
-exports.run = run;
 
 
 /***/ }),
