@@ -1,65 +1,60 @@
 /**
  * Unit tests for the action's main functionality, src/main.ts
  *
- * These should be run as if the action was called from a workflow.
- * Specifically, the inputs listed in `action.yml` should be set as environment
- * variables following the pattern `INPUT_<INPUT_NAME>`.
+ * To mock dependencies in ESM, you can create fixtures that export mock
+ * functions and objects. For example, the core module is mocked in this test,
+ * so that the actual '@actions/core' module is not imported.
  */
+import { jest } from '@jest/globals'
+import * as core from '../__fixtures__/core.js'
+import { generateBranchAlias } from '../__fixtures__/generate-branch-alias.js'
 
-import * as core from '@actions/core'
-import * as main from '../src/main'
+// Mocks should be declared before the module being tested is imported.
+jest.unstable_mockModule('@actions/core', () => core)
+jest.unstable_mockModule('../src/generate-branch-alias.js', () => ({
+  generateBranchAlias
+}))
 
-// Mock the action's main function
-const runMock = jest.spyOn(main, 'run')
+// The module being tested should be imported dynamically. This ensures that the
+// mocks are used in place of any actual dependencies.
+const { run } = await import('../src/main.js')
 
-// Other utilities
-const timeRegex = /^\d{2}:\d{2}:\d{2}/
-
-// Mock the GitHub Actions core library
-let debugMock: jest.SpiedFunction<typeof core.debug>
-let errorMock: jest.SpiedFunction<typeof core.error>
-let getInputMock: jest.SpiedFunction<typeof core.getInput>
-let setOutputMock: jest.SpiedFunction<typeof core.setOutput>
-
-describe('action', () => {
+describe('main.ts', () => {
   beforeEach(() => {
-    jest.clearAllMocks()
+    // Set the action's inputs as return values from core.getInput().
+    core.getInput.mockImplementation(() => 'test-abc')
 
-    debugMock = jest.spyOn(core, 'debug').mockImplementation()
-    errorMock = jest.spyOn(core, 'error').mockImplementation()
-    getInputMock = jest.spyOn(core, 'getInput').mockImplementation()
-    setOutputMock = jest.spyOn(core, 'setOutput').mockImplementation()
+    // Mock the generateBranchAlias function.
+    generateBranchAlias.mockImplementation(() => 'test-abc')
   })
 
-  it('sets the branch-alias output', () => {
-    // Set the action's inputs as return values from core.getInput()
-    getInputMock.mockImplementation(name => {
-      switch (name) {
-        case 'git-branch':
-          return 'test-abc'
-        default:
-          return ''
-      }
-    })
+  afterEach(() => {
+    jest.resetAllMocks()
+  })
 
-    main.run()
-    expect(runMock).toHaveReturned()
+  it('Sets the branch-alias output', async () => {
+    await run()
 
     // Verify that all of the core library functions were called correctly
-    expect(debugMock).toHaveBeenNthCalledWith(1, 'git-branch: test-abc')
-    expect(debugMock).toHaveBeenNthCalledWith(
+    expect(core.debug).toHaveBeenNthCalledWith(1, 'git-branch: test-abc')
+
+    const timeRegex = /^\d{2}:\d{2}:\d{2}/
+    expect(core.debug).toHaveBeenNthCalledWith(
       2,
       expect.stringMatching(timeRegex)
     )
-    expect(debugMock).toHaveBeenNthCalledWith(
+    expect(core.debug).toHaveBeenNthCalledWith(
       3,
       expect.stringMatching(timeRegex)
     )
-    expect(setOutputMock).toHaveBeenNthCalledWith(
+
+    // Verify the branch-alias output was set.
+    expect(core.setOutput).toHaveBeenNthCalledWith(
       1,
       'branch-alias',
-      expect.stringMatching('test-abc')
+      'test-abc'
     )
-    expect(errorMock).not.toHaveBeenCalled()
+
+    expect(core.error).not.toHaveBeenCalled()
   })
 })

@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import { generateBranchAlias } from './generate-branch-alias'
+import { generateBranchAlias } from './generate-branch-alias.js'
 
 export function run(): void {
   try {

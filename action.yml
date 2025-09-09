@@ -18,5 +18,5 @@ outputs:
     description: Branch alias suitable for Cloudflare Pages deployment
 
 runs:
-  using: node20
+  using: node24
   main: dist/index.js

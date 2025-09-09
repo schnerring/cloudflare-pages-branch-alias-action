@@ -25,17 +25,18 @@ jobs:
       fail-fast: false
       matrix:
         language:
-          - TypeScript
+          - typescript
 
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Initialize CodeQL
         id: initialize
         uses: github/codeql-action/init@v3
         with:
+          config-file: .github/codeql/codeql-config.yml
           languages: ${{ matrix.language }}
           source-root: src
 

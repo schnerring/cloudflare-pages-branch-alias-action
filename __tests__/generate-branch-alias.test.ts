@@ -1,5 +1,5 @@
 /**
- * Unit tests for src/wait.ts
+ * Unit tests for src/generate-branch-alias.ts
  */
 
 import { generateBranchAlias } from '../src/generate-branch-alias'
