@@ -39,6 +39,7 @@ The following shows how the action can be used to pass the calculated branch
 alias to Hugo via `--baseURL` flag.
 
 <!-- markdownlint-disable MD013 -->
+
 ```yml
 name: Build Hugo Site
 
@@ -76,4 +77,5 @@ jobs:
             --minify \
             --baseURL "https://${{ steps.pages-branch-alias.outputs.branch-alias }}.my-project.pages.dev"
 ```
+
 <!-- markdownlint-disable MD013 -->
